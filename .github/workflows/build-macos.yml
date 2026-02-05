@@ -1,0 +1,45 @@
+name: build-macos
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install dependencies
+        run: |
+          brew update
+          brew install cmake ninja
+
+      - name: Configure
+        run: |
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES=arm64
+
+      - name: Build
+        run: |
+          cmake --build build --config Release
+
+      - name: Package
+        run: |
+          mkdir -p dist
+          PLUGIN_PATH=$(find build -name "*.vst3" -type d | head -n 1)
+          if [ -z "$PLUGIN_PATH" ]; then
+            echo "No .vst3 found"
+            exit 1
+          fi
+          ditto -c -k --sequesterRsrc --keepParent "$PLUGIN_PATH" "dist/RosettaPrompter-macOS-arm64.vst3.zip"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: RosettaPrompter-macOS-arm64
+          path: dist/RosettaPrompter-macOS-arm64.vst3.zip
