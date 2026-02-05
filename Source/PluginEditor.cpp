@@ -5,7 +5,6 @@ RosettaPrompterAudioProcessorEditor::RosettaPrompterAudioProcessorEditor (Rosett
     : AudioProcessorEditor (&p),
       processor (p)
 {
-    setUsingNativeTitleBar (true);
     setResizable (true, true);
     setResizeLimits (420, 260, 2400, 1800);
     setSize (600, 280);
