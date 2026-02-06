@@ -7,9 +7,16 @@ RosettaPrompterAudioProcessorEditor::RosettaPrompterAudioProcessorEditor (Rosett
 {
     setResizable (true, true);
     setResizeLimits (420, 260, 2400, 1800);
-    setSize (600, 280);
+    setSize (800, 500);
 
     addAndMakeVisible (teleprompter);
+
+    debugLabel.setText ("ROSETTA PROMPTER UI OK", juce::dontSendNotification);
+    debugLabel.setJustificationType (juce::Justification::centred);
+    debugLabel.setFont (juce::Font (36.0f, juce::Font::bold));
+    debugLabel.setColour (juce::Label::textColourId, juce::Colours::black);
+    debugLabel.setInterceptsMouseClicks (false, false);
+    addAndMakeVisible (debugLabel);
 
     autoScrollButton.setClickingTogglesState (true);
     resetOnStopButton.setClickingTogglesState (true);
@@ -94,7 +101,7 @@ RosettaPrompterAudioProcessorEditor::~RosettaPrompterAudioProcessorEditor() = de
 
 void RosettaPrompterAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    const auto background = darkTheme ? juce::Colour (0xff0f1115) : juce::Colour (0xfff5e94b);
+    const auto background = darkTheme ? juce::Colour (0xff0f1115) : juce::Colour (0xffff00ff);
     g.fillAll (background);
 }
 
@@ -118,6 +125,7 @@ void RosettaPrompterAudioProcessorEditor::resized()
     manualScrollSlider.setBounds (row2);
 
     teleprompter.setBounds (bounds);
+    debugLabel.setBounds (getLocalBounds());
 }
 
 void RosettaPrompterAudioProcessorEditor::timerCallback()
