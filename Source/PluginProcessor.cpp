@@ -218,8 +218,7 @@ void RosettaPrompterAudioProcessor::updatePlayheadInfo()
 #if JUCE_MAJOR_VERSION >= 7
         if (auto position = playHead->getPosition())
         {
-            if (auto playing = position->getIsPlaying())
-                isPlayingNow = *playing;
+            isPlayingNow = position->getIsPlaying();
 
             int numerator = 4;
             if (auto timeSig = position->getTimeSignature())
