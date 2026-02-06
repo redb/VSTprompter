@@ -254,3 +254,8 @@ void RosettaPrompterAudioProcessor::updatePlayheadInfo()
 
     wasPlaying = isPlayingNow;
 }
+
+juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
+{
+    return new RosettaPrompterAudioProcessor();
+}
