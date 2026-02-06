@@ -7,16 +7,9 @@ RosettaPrompterAudioProcessorEditor::RosettaPrompterAudioProcessorEditor (Rosett
 {
     setResizable (true, true);
     setResizeLimits (420, 260, 2400, 1800);
-    setSize (800, 500);
+    setSize (860, 520);
 
     addAndMakeVisible (teleprompter);
-
-    debugLabel.setText ("ROSETTA PROMPTER UI OK", juce::dontSendNotification);
-    debugLabel.setJustificationType (juce::Justification::centred);
-    debugLabel.setFont (juce::Font (36.0f, juce::Font::bold));
-    debugLabel.setColour (juce::Label::textColourId, juce::Colours::black);
-    debugLabel.setInterceptsMouseClicks (false, false);
-    addAndMakeVisible (debugLabel);
 
     autoScrollButton.setClickingTogglesState (true);
     resetOnStopButton.setClickingTogglesState (true);
@@ -34,10 +27,17 @@ RosettaPrompterAudioProcessorEditor::RosettaPrompterAudioProcessorEditor (Rosett
     themeBox.addItem ("Dark", 1);
     themeBox.addItem ("Light (Yellow)", 2);
     themeBox.setSelectedId (2, juce::dontSendNotification);
+    auto updateLabelColours = [this]
+    {
+        cachePathLabel.setColour (juce::Label::textColourId,
+            darkTheme ? juce::Colours::white : juce::Colours::black);
+    };
     themeBox.onChange = [this]
     {
         darkTheme = (themeBox.getSelectedId() == 1);
         teleprompter.setTheme (darkTheme);
+        cachePathLabel.setColour (juce::Label::textColourId,
+            darkTheme ? juce::Colours::white : juce::Colours::black);
         repaint();
     };
 
@@ -55,6 +55,11 @@ RosettaPrompterAudioProcessorEditor::RosettaPrompterAudioProcessorEditor (Rosett
                     processor.setLyricsText (text);
                 }
             });
+    };
+
+    openCacheButton.onClick = []
+    {
+        RosettaPrompterAudioProcessor::getCacheFolder().revealToUser();
     };
 
     setStartButton.onClick = [this]
@@ -86,6 +91,13 @@ RosettaPrompterAudioProcessorEditor::RosettaPrompterAudioProcessorEditor (Rosett
     addAndMakeVisible (setEndButton);
     addAndMakeVisible (importButton);
     addAndMakeVisible (themeBox);
+    addAndMakeVisible (openCacheButton);
+    addAndMakeVisible (cachePathLabel);
+
+    cachePathLabel.setText ("Cache: " + RosettaPrompterAudioProcessor::getCacheFolder().getFullPathName(),
+        juce::dontSendNotification);
+    cachePathLabel.setJustificationType (juce::Justification::centredLeft);
+    updateLabelColours();
 
     autoScrollAttachment = std::make_unique<ButtonAttachment> (processor.apvts, RosettaPrompterAudioProcessor::ParamIDs::autoScroll, autoScrollButton);
     resetOnStopAttachment = std::make_unique<ButtonAttachment> (processor.apvts, RosettaPrompterAudioProcessor::ParamIDs::resetOnStop, resetOnStopButton);
@@ -101,31 +113,34 @@ RosettaPrompterAudioProcessorEditor::~RosettaPrompterAudioProcessorEditor() = de
 
 void RosettaPrompterAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    const auto background = darkTheme ? juce::Colour (0xff0f1115) : juce::Colour (0xffff00ff);
+    const auto background = darkTheme ? juce::Colour (0xff0f1115) : juce::Colour (0xfff5e94b);
     g.fillAll (background);
 }
 
 void RosettaPrompterAudioProcessorEditor::resized()
 {
     auto bounds = getLocalBounds().reduced (12);
-    auto controls = bounds.removeFromTop (90);
+    auto controls = bounds.removeFromTop (120);
 
-    auto row1 = controls.removeFromTop (40);
+    auto row1 = controls.removeFromTop (32);
     autoScrollButton.setBounds (row1.removeFromLeft (120));
     resetOnStopButton.setBounds (row1.removeFromLeft (140));
     themeBox.setBounds (row1.removeFromLeft (120));
     importButton.setBounds (row1.removeFromLeft (140));
+    openCacheButton.setBounds (row1.removeFromLeft (200));
 
-    auto row2 = controls.removeFromTop (40);
+    auto row2 = controls.removeFromTop (32);
     startBarLabel.setBounds (row2.removeFromLeft (140));
     setStartButton.setBounds (row2.removeFromLeft (140));
     endBarLabel.setBounds (row2.removeFromLeft (140));
     setEndButton.setBounds (row2.removeFromLeft (140));
-    fontSizeSlider.setBounds (row2.removeFromLeft (200));
+    fontSizeSlider.setBounds (row2.removeFromLeft (240));
     manualScrollSlider.setBounds (row2);
 
+    auto row3 = controls.removeFromTop (24);
+    cachePathLabel.setBounds (row3);
+
     teleprompter.setBounds (bounds);
-    debugLabel.setBounds (getLocalBounds());
 }
 
 void RosettaPrompterAudioProcessorEditor::timerCallback()

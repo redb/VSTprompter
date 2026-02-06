@@ -105,7 +105,7 @@ bool RosettaPrompterAudioProcessor::hasEditor() const
 juce::AudioProcessorEditor* RosettaPrompterAudioProcessor::createEditor()
 {
     logMessage ("createEditor called");
-    return new juce::GenericAudioProcessorEditor (*this);
+    return new RosettaPrompterAudioProcessorEditor (*this);
 }
 
 void RosettaPrompterAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
@@ -265,6 +265,14 @@ void RosettaPrompterAudioProcessor::logMessage (const juce::String& message)
 
     logFile.appendText (juce::Time::getCurrentTime().toString (true, true)
         + "  " + message + "\n");
+}
+
+juce::File RosettaPrompterAudioProcessor::getCacheFolder()
+{
+    auto folder = juce::File::getSpecialLocation (juce::File::userDocumentsDirectory)
+        .getChildFile ("RosettaPrompterCache");
+    folder.createDirectory();
+    return folder;
 }
 
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()

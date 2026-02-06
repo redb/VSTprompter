@@ -60,6 +60,7 @@ public:
     juce::String getLyricsText() const;
 
     static void logMessage (const juce::String& message);
+    static juce::File getCacheFolder();
 
 private:
     void updatePlayheadInfo();

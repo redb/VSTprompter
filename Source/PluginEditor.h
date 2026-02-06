@@ -34,7 +34,8 @@ private:
 
     juce::TextButton importButton { "Import .txt" };
     juce::ComboBox themeBox;
-    juce::Label debugLabel;
+    juce::TextButton openCacheButton { "Export Track (Open Cache)" };
+    juce::Label cachePathLabel;
 
     using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
     using ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;
