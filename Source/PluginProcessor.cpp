@@ -259,9 +259,11 @@ void RosettaPrompterAudioProcessor::updatePlayheadInfo()
 
 void RosettaPrompterAudioProcessor::logMessage (const juce::String& message)
 {
-    auto logFile = juce::File::getSpecialLocation (juce::File::userLibraryDirectory)
-        .getChildFile ("Logs")
-        .getChildFile ("RosettaPrompter.log");
+    auto logDir = juce::File::getSpecialLocation (juce::File::userHomeDirectory)
+        .getChildFile ("Library")
+        .getChildFile ("Logs");
+    logDir.createDirectory();
+    auto logFile = logDir.getChildFile ("RosettaPrompter.log");
 
     logFile.appendText (juce::Time::getCurrentTime().toString (true, true)
         + "  " + message + "\n");
