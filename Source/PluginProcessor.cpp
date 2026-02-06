@@ -103,7 +103,7 @@ bool RosettaPrompterAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* RosettaPrompterAudioProcessor::createEditor()
 {
-    return new RosettaPrompterAudioProcessorEditor (*this);
+    return new juce::GenericAudioProcessorEditor (*this);
 }
 
 void RosettaPrompterAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
