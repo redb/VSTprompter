@@ -25,8 +25,8 @@ RosettaPrompterAudioProcessorEditor::RosettaPrompterAudioProcessorEditor (Rosett
     endBarLabel.setJustificationType (juce::Justification::centredLeft);
 
     themeBox.addItem ("Dark", 1);
-    themeBox.addItem ("Light", 2);
-    themeBox.setSelectedId (1, juce::dontSendNotification);
+    themeBox.addItem ("Light (Yellow)", 2);
+    themeBox.setSelectedId (2, juce::dontSendNotification);
     themeBox.onChange = [this]
     {
         darkTheme = (themeBox.getSelectedId() == 1);
@@ -65,6 +65,7 @@ RosettaPrompterAudioProcessorEditor::RosettaPrompterAudioProcessorEditor (Rosett
         processor.setLyricsText (text);
     };
 
+    darkTheme = false;
     teleprompter.setText (processor.getLyricsText());
     teleprompter.setTheme (darkTheme);
 
@@ -93,7 +94,7 @@ RosettaPrompterAudioProcessorEditor::~RosettaPrompterAudioProcessorEditor() = de
 
 void RosettaPrompterAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    const auto background = darkTheme ? juce::Colour (0xff0f1115) : juce::Colour (0xfff5f1e8);
+    const auto background = darkTheme ? juce::Colour (0xff0f1115) : juce::Colour (0xfff5e94b);
     g.fillAll (background);
 }
 

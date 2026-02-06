@@ -150,9 +150,9 @@ void TeleprompterComponent::ContentComponent::setTheme (bool useDarkTheme)
     }
     else
     {
-        backgroundColour = juce::Colour (0xfff5f1e8);
-        textColour = juce::Colour (0xff1b1b1b);
-        highlightColour = juce::Colour (0xff5aa9ff);
+        backgroundColour = juce::Colour (0xfff5e94b);
+        textColour = juce::Colour (0xff1a1a1a);
+        highlightColour = juce::Colour (0xfff58a1f);
     }
 
     editor.setColour (juce::TextEditor::backgroundColourId, juce::Colours::transparentBlack);
