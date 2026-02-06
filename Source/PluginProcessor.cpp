@@ -7,6 +7,7 @@ RosettaPrompterAudioProcessor::RosettaPrompterAudioProcessor()
         .withOutput ("Output", juce::AudioChannelSet::stereo(), true)),
       apvts (*this, nullptr, "PARAMS", createParameterLayout())
 {
+    logMessage ("Processor constructed");
 }
 
 RosettaPrompterAudioProcessor::~RosettaPrompterAudioProcessor() = default;
@@ -103,6 +104,7 @@ bool RosettaPrompterAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* RosettaPrompterAudioProcessor::createEditor()
 {
+    logMessage ("createEditor called");
     return new juce::GenericAudioProcessorEditor (*this);
 }
 
@@ -253,6 +255,16 @@ void RosettaPrompterAudioProcessor::updatePlayheadInfo()
         stoppedFlag.store (true);
 
     wasPlaying = isPlayingNow;
+}
+
+void RosettaPrompterAudioProcessor::logMessage (const juce::String& message)
+{
+    auto logFile = juce::File::getSpecialLocation (juce::File::userLibraryDirectory)
+        .getChildFile ("Logs")
+        .getChildFile ("RosettaPrompter.log");
+
+    logFile.appendText (juce::Time::getCurrentTime().toString (true, true)
+        + "  " + message + "\n");
 }
 
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()

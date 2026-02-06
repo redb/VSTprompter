@@ -59,6 +59,8 @@ public:
     void setLyricsText (const juce::String& text);
     juce::String getLyricsText() const;
 
+    static void logMessage (const juce::String& message);
+
 private:
     void updatePlayheadInfo();
 
